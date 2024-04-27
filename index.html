@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Order Form</title>
+</head>
+<body>
+    <h1>Pizza Order Form</h1>
+    <form id="pizzaOrderForm" onsubmit="submitOrder(); return false;">
+        <label for="ClientName">Name:</label>
+        <input type="text" id="clientName" name="clientName"><br>
+
+        <label for="phone">Phone:</label>
+        <input type="text" id="phone" name="phone"><br>
+
+        <label for="pizzaName">Pizza Name:</label>
+        <select id="pizzaName" name="pizzaName">
+            <option value="Marg">Marg</option>
+            <option value="Haw">Haw</option>
+            <option value="Pep">Pep</option>
+        </select><br>
+        <label for="pizzaSize">Pizza Size:</label>
+        <select id="pizzaSize" name="pizzaSize">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+        </select><br>
+
+        <label for="topping">Topping:</label>
+        <input type="text" id="topping" name="topping"><br>
+
+        <label for="price">Price:</label>
+        <input type="text" id="price" name="price"><br>
+
+        <button type="submit">Place Order</button>
+    </form>
+
+    <script>
+        function submitOrder() {
+            const size = document.getElementById("pizzaSize").value;
+            const topping = document.getElementById("topping").value;
+            const customerName = document.getElementById("clientName").value;
+            const pizzaName = document.getElementById("pizzaName").value;
+            const price = document.getElementById("price").value;
+            const phone = document.getElementById("phone").value;
+
+            console.log(JSON.stringify({ size, topping, customerName, pizzaName, price, phone }));
+
+            fetch('/api/orders', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ size, topping, customerName, pizzaName, price, phone }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("Order placed successfully!");
+                console.log(data);
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
